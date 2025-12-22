@@ -29,15 +29,31 @@ let normalize value =
   let mod_value = value mod 100 in
   if mod_value >= 0 then mod_value else 100 + mod_value
 
+let score_from_value origin value =
+  if value > 0 then value / 100
+  else if value == 0 then 1
+  else if origin == 0 && value > -100 then 0
+  else (Int.abs value / 100) + 1
+
 let rec solve instructions curr count =
   match instructions with
   | [] -> count
   | hd :: tl ->
-      let result = apply_instruction curr hd |> normalize in
-      let _ = print_int result in
-      let _ = print_endline "" in
-      solve tl result (count + if result == 0 then 1 else 0)
+      let result = apply_instruction curr hd in
+      let normalized_result = normalize result in
+      let score_delta = score_from_value curr result in
+      let _ =
+        Format.printf "Result: %d, normalized: %d, delta: %d\n" result
+          normalized_result score_delta
+      in
+      solve tl normalized_result (count + score_delta)
+
+let file_to_use args =
+  if Array.length args == 1 then "day1.txt"
+  else Format.sprintf "day1_%s.txt" args.(1)
 
 let _ =
-  let input = List.map parse_row (readfile "day1.txt") in
-  solve input 50 0 |> print_int
+  let file = file_to_use Sys.argv in
+  let input = List.map parse_row (readfile file) in
+  let _ = solve input 50 0 |> print_int in
+  print_endline
