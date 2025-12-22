@@ -52,8 +52,13 @@ let file_to_use args =
   if Array.length args == 1 then "day1.txt"
   else Format.sprintf "day1_%s.txt" args.(1)
 
+
+let solve_file file = 
+  let input = List.map parse_row (readfile file) in
+  solve input 50 0 
+
 let _ =
   let file = file_to_use Sys.argv in
-  let input = List.map parse_row (readfile file) in
-  let _ = solve input 50 0 |> print_int in
+  let result = solve_file file in
+  let _ = print_int result in
   print_endline
