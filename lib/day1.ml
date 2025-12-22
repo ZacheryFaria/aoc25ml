@@ -19,6 +19,8 @@ let direction_from_row row =
 let number_from_row row =
   String.sub row 1 (String.length row - 1) |> int_of_string
 
+(* let%test _ = number_from_row "R25" == 22 *)
+
 let parse_row value =
   { dir = direction_from_row value; value = number_from_row value }
 
@@ -52,13 +54,6 @@ let file_to_use args =
   if Array.length args == 1 then "day1.txt"
   else Format.sprintf "day1_%s.txt" args.(1)
 
-
-let solve_file file = 
+let solve_file file =
   let input = List.map parse_row (readfile file) in
-  solve input 50 0 
-
-let _ =
-  let file = file_to_use Sys.argv in
-  let result = solve_file file in
-  let _ = print_int result in
-  print_endline
+  solve input 50 0
