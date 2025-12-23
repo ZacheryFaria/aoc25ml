@@ -34,7 +34,7 @@ let normalize value =
 let score_from_value origin value =
   if value > 0 then value / 100
   else if value == 0 then 1
-  else if origin == 0 && value > -100 then 0
+  else if origin == 0 then (Int.abs value / 100)
   else (Int.abs value / 100) + 1
 
 let rec solve instructions curr count =
@@ -44,10 +44,10 @@ let rec solve instructions curr count =
       let result = apply_instruction curr hd in
       let normalized_result = normalize result in
       let score_delta = score_from_value curr result in
-      let _ =
+      (* let _ =
         Format.printf "Result: %d, normalized: %d, delta: %d\n" result
           normalized_result score_delta
-      in
+      in *)
       solve tl normalized_result (count + score_delta)
 
 let file_to_use args =
