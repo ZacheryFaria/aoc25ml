@@ -1,6 +1,6 @@
 (library
  (name test_aoc)
  (libraries aoc)
- (inline_tests)
+ (inline_tests (deps (source_tree %{project_root}/test/test_files)))
  (preprocess
   (pps ppx_expect)))
